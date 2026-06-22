@@ -667,15 +667,37 @@
     entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); } });
   }, { threshold: 0.15 });
   reveals.forEach(el => io.observe(el));
+// form submit -> Make Webhook
+const form = document.getElementById('leadForm');
+const formFields = document.getElementById('formFields');
+const successState = document.getElementById('successState');
 
-  // form submit (demo - no backend)
-  const form = document.getElementById('leadForm');
-  const formFields = document.getElementById('formFields');
-  const successState = document.getElementById('successState');
-  form.addEventListener('submit', function(e){
-    e.preventDefault();
+form.addEventListener('submit', async function(e){
+  e.preventDefault();
+
+  const data = {
+    fullName: document.getElementById('fullName').value,
+    phone: document.getElementById('phone').value,
+    email: document.getElementById('email').value,
+    business: document.getElementById('business').value
+  };
+
+  try {
+    await fetch('https://hook.eu1.make.com/erdtul0w7lgx6yd9qxpf143m83ft6xbp', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    });
+
     formFields.classList.add('hide');
     successState.classList.add('show');
+
+  } catch (error) {
+    alert('אירעה שגיאה בשליחת הטופס');
+    console.error(error);
+  }
   });
 </script>
 
